@@ -1,7 +1,6 @@
 import requests
 from datetime import datetime
 
-
 class Vk:
     def __init__(self, access_token, user_id, version='5.131'):
         self.token = access_token
@@ -28,13 +27,18 @@ class Vk:
                 for photo in response.json()['response']['items']:
                     date = datetime.fromtimestamp(photo['date'])
                     photos_sizes = photo['sizes']
-                    photo_url = photos_sizes[len(photos_sizes) - 1]['url']
+                    photo_sizes = photos_sizes[len(photos_sizes) - 1]
                     photos_info.append({
                         'likes': photo['likes']['count'],
                         'date': date.strftime("(%y.%m.%d-%H.%M)"),
-                        'url': photo_url
+                        'url': photo_sizes['url'],
+                        'size': {
+                            'height': photo_sizes['height'],
+                            'width': photo_sizes['width']
+                        }
                     })
                 return {'user': owner_id,
                         'photos': photos_info}
             except:
-                return 0
+                return {'user': owner_id,
+                        'photos': 'No photo in profile'}
