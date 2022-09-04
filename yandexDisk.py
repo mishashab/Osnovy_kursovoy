@@ -11,6 +11,15 @@ class YaUploader:
             'Authorization': f'OAuth {self.token}',
         }
 
+    def create_base_folder(self):
+        host = "https://cloud-api.yandex.net/v1/disk/resources"
+        params = {"path": 'netology'}
+        headers = self.get_headers()
+        response = requests.get(host, headers=headers, params=params)
+        if response.status_code == 404:
+            requests.put(host, headers=headers, params=params)
+        pass
+
     def upload(self, folder_name, photo):
         current_files_names = []
         host = "https://cloud-api.yandex.net/v1/disk/resources"

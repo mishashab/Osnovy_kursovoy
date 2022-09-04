@@ -4,21 +4,17 @@ from vk import Vk
 from yandexDisk import YaUploader
 from datetime import datetime
 
+
 access_token = ''
 user_id = ''
 ya_token = ''
 
 
 def upload_from_vk():
-    # loader_user_id = input('Введите id профиля для сохранения фотографий: ')
-    loader_user_id = '98865615'
+    loader_user_id = input('Введите id профиля для сохранения фотографий: ')
+    # loader_user_id = '98865615'
     vk = Vk(access_token, user_id)
     return vk.photos(loader_user_id)
-
-
-def save_file_on_ydisk(folder_name, photo):
-    ya = YaUploader(ya_token)
-    ya.upload(folder_name, photo)
 
 
 def reserved_coping():
@@ -45,8 +41,10 @@ def reserved_coping():
     if photos_count <= 0 or photos_count > len(photos):
         photos_count = 5
     bar = IncrementalBar('Upload photo on Yandex disk', max=photos_count)
+    ya = YaUploader(ya_token)
+    ya.create_base_folder()
     for photo in photos[:photos_count]:
-        save_file_on_ydisk(folder_name, photo)
+        ya.upload(folder_name, photo)
         bar.next()
     bar.finish()
     return 0
